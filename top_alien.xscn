@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="4" version="2.0" version_name="Godot Engine v2.0.stable.official">
-	<ext_resource path="res://spr_shooter_0.png" type="Texture" index="1"></ext_resource>
-	<ext_resource path="res://background.gd" type="Script" index="0"></ext_resource>
+<resource_file type="PackedScene" subresource_count="6" version="2.0" version_name="Godot Engine v2.0.stable.official">
+	<ext_resource path="res://third_alien.gd" type="Script" index="2"></ext_resource>
+	<ext_resource path="res://last_alien2.png" type="Texture" index="1"></ext_resource>
+	<ext_resource path="res://last_alien1.png" type="Texture" index="0"></ext_resource>
 	<resource type="RectangleShape2D" path="local://1">
 		<real name="custom_solver_bias"> 0 </real>
-		<vector2 name="extents"> 32, 20.5125 </vector2>
+		<vector2 name="extents"> 17, 18 </vector2>
+
+	</resource>
+	<resource type="SpriteFrames" path="local://5">
+		<array name="frames" len="2" shared="false">
+			<resource  external="0">  </resource>
+			<resource  external="1">  </resource>
+		</array>
 
 	</resource>
 	<main_resource>
@@ -17,12 +25,9 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "names" </string>
-			<string_array  len="36">
-				<string> "Panel" </string>
+			<string_array  len="33">
+				<string> "last_alien" </string>
 				<string> "transform/pos" </string>
-				<string> "script/script" </string>
-				<string> "Node2D" </string>
-				<string> "ship" </string>
 				<string> "input/pickable" </string>
 				<string> "shapes/0/shape" </string>
 				<string> "shapes/0/transform" </string>
@@ -45,31 +50,29 @@
 				<string> "damp_override/linear" </string>
 				<string> "damp_override/angular" </string>
 				<string> "RigidBody2D" </string>
-				<string> "sprite" </string>
-				<string> "transform/scale" </string>
-				<string> "texture" </string>
-				<string> "__meta__" </string>
 				<string> "Sprite" </string>
+				<string> "frames" </string>
+				<string> "script/script" </string>
+				<string> "__meta__" </string>
+				<string> "AnimatedSprite" </string>
 				<string> "CollisionShape2D" </string>
 				<string> "shape" </string>
 				<string> "trigger" </string>
 				<string> "_update_shape_index" </string>
 			</string_array>
 			<string> "node_count" </string>
-			<int> 4 </int>
+			<int> 3 </int>
 			<string> "node_paths" </string>
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="96"> 				-1, -1, 3, 0, -1, 2, 1, 0, 2, 1, 0, 0, 0, 26, 4, -1, 22, 1, 2, 5, 3, 6, 4, 7, 5, 8, 3, 9, 6, 10, 6, 11, 7, 12, 8, 13, 8, 14, 9, 15, 9, 16, 3, 17, 7, 18, 7, 19, 3, 20, 3, 21, 10, 22, 11, 23, 9, 24, 12, 25, 12, 0, 1, 0, 31, 27, -1, 4, 1, 13, 28, 14, 29, 15, 30, 16, 0, 1, 0, 32, 32, -1, 6, 1, 17, 28, 18, 33, 4, 34, 3, 35, 7, 30, 19, 0 </int_array>
+			<int_array  len="79"> 				-1, -1, 23, 0, -1, 22, 1, 0, 2, 1, 3, 2, 4, 3, 5, 1, 6, 4, 7, 4, 8, 5, 9, 6, 10, 7, 11, 7, 12, 7, 13, 1, 14, 5, 15, 5, 16, 1, 17, 1, 18, 8, 19, 9, 20, 7, 21, 7, 22, 10, 0, 0, 0, 28, 24, -1, 3, 25, 11, 26, 12, 27, 13, 0, 0, 0, 29, 29, -1, 4, 30, 2, 31, 1, 32, 5, 27, 14, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="20" shared="false">
-				<vector2> -1.90735e-05, 3.05176e-05 </vector2>
-				<resource  external="0">  </resource>
-				<vector2> 338.267, 675.921 </vector2>
+			<array  len="15" shared="false">
+				<vector2> 68.2196, 85.3846 </vector2>
 				<bool> False </bool>
 				<resource  resource_type="Shape2D" path="local://1">  </resource>
-				<matrix32> 0.928789, -0, 0, 0.800078, 1.92354, 4.59821 </matrix32>
+				<matrix32> 1, 0, 0, 1, 0, 0 </matrix32>
 				<int> 1 </int>
 				<int> 0 </int>
 				<real> 1 </real>
@@ -77,15 +80,12 @@
 				<bool> True </bool>
 				<vector2> 0, 0 </vector2>
 				<real> -1 </real>
-				<vector2> 1.44987, 6.45517 </vector2>
-				<vector2> 1.67041, 1.36246 </vector2>
-				<resource  external="1">  </resource>
+				<resource  resource_type="SpriteFrames" path="local://5">  </resource>
+				<resource  external="2">  </resource>
 				<dictionary  shared="false">
 					<string> "_edit_lock_" </string>
 					<bool> True </bool>
 				</dictionary>
-				<vector2> 1.92354, 4.59821 </vector2>
-				<vector2> 0.928789, 0.800078 </vector2>
 				<dictionary  shared="false">
 					<string> "_edit_lock_" </string>
 					<bool> True </bool>
