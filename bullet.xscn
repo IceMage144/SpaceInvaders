@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resource_file type="PackedScene" subresource_count="2" version="2.0" version_name="Godot Engine v2.0.stable.official">
+<resource_file type="PackedScene" subresource_count="3" version="2.0" version_name="Godot Engine v2.0.stable.official">
 	<ext_resource path="res://shoot.png" type="Texture" index="0"></ext_resource>
+	<resource type="RectangleShape2D" path="local://1">
+		<real name="custom_solver_bias"> 0 </real>
+		<vector2 name="extents"> 10, 10 </vector2>
+
+	</resource>
 	<main_resource>
 		<dictionary name="_bundled" shared="false">
 			<string> "conn_count" </string>
@@ -11,9 +16,12 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "names" </string>
-			<string_array  len="29">
+			<string_array  len="33">
 				<string> "bullet" </string>
 				<string> "input/pickable" </string>
+				<string> "shapes/0/shape" </string>
+				<string> "shapes/0/transform" </string>
+				<string> "shapes/0/trigger" </string>
 				<string> "collision/layers" </string>
 				<string> "collision/mask" </string>
 				<string> "mode" </string>
@@ -39,6 +47,7 @@
 				<string> "__meta__" </string>
 				<string> "CollisionShape2D" </string>
 				<string> "transform/pos" </string>
+				<string> "shape" </string>
 				<string> "trigger" </string>
 				<string> "_update_shape_index" </string>
 			</string_array>
@@ -48,10 +57,12 @@
 			<array  len="0" shared="false">
 			</array>
 			<string> "nodes" </string>
-			<int_array  len="75"> 				-1, -1, 19, 0, -1, 18, 1, 0, 2, 1, 3, 1, 4, 2, 5, 3, 6, 4, 7, 4, 8, 4, 9, 0, 10, 1, 11, 1, 12, 5, 13, 0, 14, 5, 15, 6, 16, 4, 17, 4, 18, 7, 0, 0, 0, 20, 20, -1, 4, 21, 8, 22, 9, 23, 5, 24, 10, 0, 0, 0, 25, 25, -1, 5, 26, 11, 21, 12, 27, 0, 28, 2, 24, 13, 0 </int_array>
+			<int_array  len="83"> 				-1, -1, 22, 0, -1, 21, 1, 0, 2, 1, 3, 2, 4, 0, 5, 3, 6, 3, 7, 4, 8, 5, 9, 6, 10, 6, 11, 6, 12, 0, 13, 3, 14, 3, 15, 7, 16, 0, 17, 7, 18, 8, 19, 6, 20, 6, 21, 9, 0, 0, 0, 23, 23, -1, 4, 24, 10, 25, 11, 26, 7, 27, 12, 0, 0, 0, 28, 28, -1, 6, 29, 13, 24, 14, 30, 1, 31, 0, 32, 4, 27, 15, 0 </int_array>
 			<string> "variants" </string>
-			<array  len="14" shared="false">
+			<array  len="16" shared="false">
 				<bool> False </bool>
+				<resource  resource_type="Shape2D" path="local://1">  </resource>
+				<matrix32> 0.504402, -0, 0, 0.965876, 0.143012, -0.074934 </matrix32>
 				<int> 1 </int>
 				<int> 0 </int>
 				<real> 1 </real>
