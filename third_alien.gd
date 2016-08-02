@@ -20,3 +20,9 @@ func _on_bullet_enter( body ):
 		get_node("/root/Panel").remove_child(body)
 		get_node("/root/Panel").anounce_death(get_parent())
 		get_parent().queue_free()
+		
+func anounce_hit():
+	if (get_pos().x > 620):
+		hit_edge("right")
+	elif (get_pos().x < 60):
+		hit_edge("left")

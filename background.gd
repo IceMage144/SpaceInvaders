@@ -9,16 +9,19 @@ const Botton_alien = preload("res://botton_alien.xscn")
 
 onready var ship = get_node("ship")
 onready var ship_pos = ship.get_pos()
-onready var clock1 = [0.0, 4]
+onready var clock1 = [0.0, 0]
 onready var enemyshottime = [0.0, rand_range(0.5, 1.25)]
 
 var rand_var = 0
 var ship_speed = 150
+var top_line = 0
 var screen_size = Vector2(622, 768)
+var enemy_dir = Vector2(20, 0)
 var new_bullet = Bullet.instance()
 var new_enemy_bullet = Enemy_bullet.instance()
 var enemies = [[], [], [], [], []]
 var ultenemy = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+var enemyline = [11, 11, 11, 11, 11]
 
 func _ready():
 	#cria os aliens
@@ -52,18 +55,20 @@ func _fixed_process(delta):
 	if has_node("enemyBullet") == true:
 		if new_enemy_bullet.get_pos().y > 800:
 			remove_child(new_enemy_bullet)
-	#clock de 1s
+	#clock para mexer os aliens 
 	clock1[0] += delta
 	if clock1[0] >= 0.5:
 		for j in range(11):
-			if enemies[clock1[1]][j] != null:
-				enemies[clock1[1]][j].set_pos(Vector2(enemies[clock1[1]][j].get_pos().x + 20, enemies[clock1[1]][j].get_pos().y))
+			if enemies[4-clock1[1]][j] != null:
+				enemies[4-clock1[1]][j].set_pos(enemies[4-clock1[1]][j].get_pos() + enemy_dir)
+				#abaixar os aliens
+				get_node("/root/first_alien").anounce_hit()
 		#clock para as linhas
-		if clock1[1] == 0:
-			clock1[1] = 4
-		else:
-			clock1[1] -= 1
+		clock1[1] = (clock1[1]+1)%5
+		while(enemyline[4-clock1[1]] == 0):
+			clock1[1] = (clock1[1]+1)%5
 		clock1[0] = 0
+		
 	#tempo de tiro dos aliens
 	enemyshottime[0] += delta
 	for j in range(11):
@@ -83,10 +88,10 @@ func _fixed_process(delta):
 						else:
 							selenemy = 0 #nao seleciona nem o da direita nem o da esquerda
 						if has_node("enemyBullet") == false:
-							if randf() <= 0.4:
+							if randf() <= 0.25:
 								#primeiro inimigo atira
 								new_enemy_bullet.set_pos(enemies[ultenemy[j]-1][j].get_pos())
-							elif randf() <= 0.66:
+							elif randf() <= 0.33:
 								#segundo inimigo atira
 								new_enemy_bullet.set_pos(enemies[ultenemy[(j+selenemy)%11]-1][(j+selenemy)%11].get_pos())
 							else:
@@ -130,3 +135,19 @@ func anounce_death(object):
 						a -= 1
 				else:
 					ultenemy[j] = 0
+				#verifica quantos aliens tem em cada linha
+				enemyline[i] -= 1
+				if enemyline[top_line] == 0:
+					top_line += 1
+
+func hit_edge(side):
+	if (side == "right"):
+		if (clock1[1] == top_line and enemy_dir == Vector2(20,0)):
+			enemy_dir = Vector2(0, 20)
+		elif (clock1[1] == top_line and enemy_dir == Vector2(0, 20)):
+			enemy_dir = Vector2(-20, 0)
+	else:
+		if (clock1[1] == top_line and enemy_dir == Vector2(-20,0)):
+			enemy_dir = Vector2(0, 20)
+		elif (clock1[1] == top_line and enemy_dir == Vector2(0, 20)):
+			enemy_dir = Vector2(20, 0)

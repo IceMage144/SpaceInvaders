@@ -10,10 +10,8 @@ func _ready():
 	# Initialization here
 	pass
 
-
-
-
 func _on_enemyBullet_enter( body ):
 	if body.get_name() == "bullet":
 		get_node("/root/Panel").remove_child(body)
 		get_parent().queue_free()
+		print("OK")
