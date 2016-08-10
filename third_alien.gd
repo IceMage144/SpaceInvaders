@@ -17,6 +17,6 @@ func _fixed_process(delta):
 
 func _on_bullet_enter( body ):
 	if body.get_name() == "bullet":
-		get_node("/root/Panel").remove_child(body)
+		get_node("/root/Panel/bullet").queue_free()
 		get_node("/root/Panel").anounce_death(get_parent())
 		get_parent().queue_free()

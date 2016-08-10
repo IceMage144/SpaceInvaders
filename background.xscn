@@ -65,7 +65,7 @@
 			<string> "variants" </string>
 			<array  len="19" shared="false">
 				<resource  external="0">  </resource>
-				<vector2> 336.76, 678.936 </vector2>
+				<vector2> 67.8604, 688.957 </vector2>
 				<bool> False </bool>
 				<resource  resource_type="Shape2D" path="local://1">  </resource>
 				<matrix32> 0.928789, -0, 0, 0.800078, 1.92354, 4.59821 </matrix32>

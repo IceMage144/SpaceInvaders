@@ -9,6 +9,7 @@ func _ready():
 
 func _on_enemyBullet_enter( body ):
 	if body.get_name() == "bullet":
-		get_node("/root/Panel").remove_child(body)
+		get_node("/root/Panel/bullet").queue_free()
+		#get_node("/root/Panel").remove_child(get_parent()a)
 		get_parent().queue_free()
 
