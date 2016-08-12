@@ -7,14 +7,15 @@ const Top_alien = preload("res://top_alien.xscn")
 const Middle_alien = preload("res://middle_alien.xscn")
 const Botton_alien = preload("res://botton_alien.xscn")
 const Bonus_alien = preload("res://bonus_alien.xscn")
+const Ship = preload("res://ship.xscn")
 
-onready var ship = get_node("ship")
-onready var ship_pos = ship.get_pos()
+onready var score_label = get_node("Score")
+onready var lives_label = get_node("Lives")
 onready var clock1 = [0.0, 0, 0] #0=>clock, 1=>colunas, 2=>sincronização do hit_edge
 onready var enemyshottime = [0.0, rand_range(0.5, 1.25)]
 onready var bonus_alien_clk = [0.0, 5, randi()%2]
 
-var rand_var = 0
+var rand_var = randi()%11
 var ship_speed = 150
 var top_line = 4
 var column_range = [0, 10]
@@ -22,13 +23,20 @@ var screen_size = Vector2(622, 768)
 var enemy_dir = Vector2(20, 0)
 var new_bullet = null
 var new_enemy_bullet = null
+var new_ship = null
+var selenemy = 0
 #var new_bonus_alien = Bonus_alien.instance()
 var enemies = [[], [], [], [], []]
 var ultenemy = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 var enemyline = [11, 11, 11, 11, 11]
 var score = 0
+var lives = 2
 
 func _ready():
+	#cria a nave
+	new_ship = Ship.instance()
+	new_ship.set_pos(Vector2(50, 700))
+	add_child(new_ship)
 	#cria os aliens
 	#se mudar as poscoes dos aliens mudar no tempo do tiro tbm
 	for i in range(11):
@@ -48,11 +56,10 @@ func _ready():
 
 func _fixed_process(delta):
 	# Mexer nesses ifs se quiser ajustar as posições maxima e minima da nave
-	if (ship_pos.x > 40 and Input.is_action_pressed("move_left")):
-		ship_pos.x -= ship_speed*delta
-	if (ship_pos.x < screen_size.x and Input.is_action_pressed("move_right")):
-		ship_pos.x += ship_speed*delta
-	ship.set_pos(ship_pos)
+	if (new_ship.get_pos().x > 40 and Input.is_action_pressed("move_left")):
+		new_ship.set_pos(new_ship.get_pos() - Vector2(ship_speed*delta, 0))
+	if (new_ship.get_pos().x < screen_size.x and Input.is_action_pressed("move_right")):
+		new_ship.set_pos(new_ship.get_pos() + Vector2(ship_speed*delta, 0))
 	#limite posicional da bullet
 	if has_node("bullet") == true:
 		if new_bullet.get_pos().y < 50:
@@ -84,18 +91,19 @@ func _fixed_process(delta):
 	#tempo de tiro dos aliens
 	enemyshottime[0] += delta
 	for j in range(11):
-		var selenemy = 0
+		selenemy = 0
 		if ultenemy[j] > 0:
-			if enemies[ultenemy[j]-1][j].get_pos().x < ship_pos.x+50:
+			if enemies[ultenemy[j]-1][j].get_pos().x < new_ship.get_pos().x+50:
 				#esses dois codigos(\/ e /\) selecionam um inimigo q esta peto da nave
-				if enemies[ultenemy[j]-1][j].get_pos().x > ship_pos.x-50:
+				if enemies[ultenemy[j]-1][j].get_pos().x > new_ship.get_pos().x-50:
 					if enemyshottime[0] >= enemyshottime[1]:
+						#print("OK")
 						#ve se o tempo de tiro 
 						if ultenemy[(j+1)%11] != 0:
-							if enemies[ultenemy[(j+1)%11]-1][(j+1)%11].get_pos().x < ship_pos.x+50:
+							if enemies[ultenemy[(j+1)%11]-1][(j+1)%11].get_pos().x < new_ship.get_pos().x+50:
 								selenemy = 1 #seleciona o inimigo da direita
 						elif ultenemy[(j-1)%11] != 0:
-							if enemies[ultenemy[(j-1)%11]-1][(j-1)%11].get_pos().x > ship_pos.x-50:
+							if enemies[ultenemy[(j-1)%11]-1][(j-1)%11].get_pos().x > new_ship.get_pos().x-50:
 								selenemy = -1 #seleciona o inimigo da esquerda
 						else:
 							selenemy = 0 #nao seleciona nem o da direita nem o da esquerda
@@ -110,19 +118,18 @@ func _fixed_process(delta):
 							else:
 								#inimigo aleatorio atira
 								rand_var = randi()%11
+								while (ultenemy[rand_var] == 0):
+									rand_var = randi()%11
 								new_enemy_bullet.set_pos(enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos())
 							add_child(new_enemy_bullet)
 						enemyshottime[0] = 0 #reseta o delta de tempo de tiro
 						enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
+				else:
+					rand_shot(j)
+			else:
+				rand_shot(j)
 		else:
-			if enemyshottime[0] >= enemyshottime[1]:
-				rand_var = randi()%11
-			if has_node("enemyBullet") == false: #checar se tem alien na coluna
-				new_enemy_bullet = Enemy_bullet.instance()
-				new_enemy_bullet.set_pos(enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos())
-				add_child(new_enemy_bullet)
-			enemyshottime[0] = 0 #reseta o delta de tempo de tiro
-			enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
+			rand_shot(j)
 	
 	#clock para a aparição do alien bonus
 	#bonus_alien_clk[0] += delta
@@ -140,7 +147,7 @@ func _input(event):
 	#só atira se a bullet n estiver na tela
 	if event.is_action_pressed("player_shoot") and has_node("bullet")==false:
 		new_bullet = Bullet.instance()
-		new_bullet.set_pos(Vector2(ship_pos.x, ship_pos.y-30))
+		new_bullet.set_pos(Vector2(new_ship.get_pos().x, new_ship.get_pos().y-30))
 		add_child(new_bullet)
 
 #deleta o alien da matriz de inimigos
@@ -179,6 +186,7 @@ func anounce_death(object):
 					score += 100
 				else:
 					score += 150
+				score_label.set_text(var2str(score))
 
 func hit_edge(side):
 	if (side == "right"):
@@ -191,3 +199,22 @@ func hit_edge(side):
 			enemy_dir = Vector2(0, 20)
 		elif (clock1[1] == top_line and enemy_dir == Vector2(0, 20)):
 			enemy_dir = Vector2(20, 0)
+			
+func rand_shot(j):
+	if enemyshottime[0] >= enemyshottime[1]:
+		rand_var = randi()%11
+		while (ultenemy[rand_var] == 0):
+			rand_var = randi()%11
+		if has_node("enemyBullet") == false: #checar se o tiro ja foi destruido
+			new_enemy_bullet = Enemy_bullet.instance()
+			new_enemy_bullet.set_pos(enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos())
+			add_child(new_enemy_bullet)
+		enemyshottime[0] = 0 #reseta o delta de tempo de tiro
+		enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
+
+func reborn():
+	new_ship = Ship.instance()
+	new_ship.set_pos(Vector2(50, 700))
+	add_child(new_ship)
+	lives -= 1
+	lives_label.set_text(var2str(lives))
