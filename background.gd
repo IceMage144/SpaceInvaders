@@ -8,6 +8,7 @@ const Middle_alien = preload("res://middle_alien.xscn")
 const Botton_alien = preload("res://botton_alien.xscn")
 const Bonus_alien = preload("res://bonus_alien.xscn")
 const Ship = preload("res://ship.xscn")
+const Barrier = preload("res://barrier.xscn")
 
 onready var score_label = get_node("Score")
 onready var lives_label = get_node("Lives")
@@ -27,6 +28,7 @@ var new_ship = null
 var selenemy = 0
 #var new_bonus_alien = Bonus_alien.instance()
 var enemies = [[], [], [], [], []]
+var barriers = []
 var ultenemy = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
 var enemyline = [11, 11, 11, 11, 11]
 var score = 0
@@ -51,6 +53,10 @@ func _ready():
 			enemies[k+3].append(Botton_alien.instance())
 			enemies[k+3][i].set_pos(Vector2(50 + 50*i, 100 + 50*(k+3)))
 			add_child(enemies[k+3][i])
+	for i in range(3):
+		barriers.append(Barrier.instance())
+		barriers[i].set_pos(Vector2(120 + 200*i, 500))
+		add_child(barriers[i])
 	set_process_input(true)
 	set_fixed_process(true)
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resource_file type="PackedScene" subresource_count="6" version="2.1" version_name="Godot Engine v2.1.stable.official">
-	<ext_resource path="res://images/first_alien2.png" type="Texture" index="1"></ext_resource>
-	<ext_resource path="res://images/first_alien1.png" type="Texture" index="0"></ext_resource>
 	<ext_resource path="res://third_alien.gd" type="Script" index="2"></ext_resource>
+	<ext_resource path="res://images/first_alien2.tex" type="Texture" index="1"></ext_resource>
+	<ext_resource path="res://images/first_alien1.tex" type="Texture" index="0"></ext_resource>
 	<resource type="RectangleShape2D" path="local://1">
 		<real name="custom_solver_bias"> 0 </real>
 		<vector2 name="extents"> 25, 18 </vector2>
@@ -37,7 +37,7 @@
 			</array>
 			<string> "names" </string>
 			<string_array  len="25">
-				<string> "first_alien" </string>
+				<string> "botton_alien" </string>
 				<string> "transform/scale" </string>
 				<string> "input/pickable" </string>
 				<string> "shapes/0/shape" </string>
