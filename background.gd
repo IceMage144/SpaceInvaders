@@ -94,7 +94,7 @@ func _fixed_process(delta):
 		selenemy = 0
 		if ultenemy[j] > 0:
 			if enemies[ultenemy[j]-1][j].get_pos().x < new_ship.get_pos().x+50:
-				#esses dois codigos(\/ e /\) selecionam um inimigo q esta peto da nave
+				#esses dois codigos(\/ e /\) selecionam um inimigo que esta perto da nave
 				if enemies[ultenemy[j]-1][j].get_pos().x > new_ship.get_pos().x-50:
 					if enemyshottime[0] >= enemyshottime[1]:
 						#print("OK")
@@ -108,19 +108,22 @@ func _fixed_process(delta):
 						else:
 							selenemy = 0 #nao seleciona nem o da direita nem o da esquerda
 						if has_node("enemyBullet") == false:
+							var enemypos
 							new_enemy_bullet = Enemy_bullet.instance()
 							if randf() <= 0.25:
 								#primeiro inimigo atira
-								new_enemy_bullet.set_pos(enemies[ultenemy[j]-1][j].get_pos())
+								enemypos = enemies[ultenemy[j]-1][j].get_pos()
 							elif randf() <= 0.33:
 								#segundo inimigo atira
-								new_enemy_bullet.set_pos(enemies[ultenemy[(j+selenemy)%11]-1][(j+selenemy)%11].get_pos())
+								enemypos = enemies[ultenemy[(j+selenemy)%11]-1][(j+selenemy)%11].get_pos()
+								
 							else:
 								#inimigo aleatorio atira
 								rand_var = randi()%11
 								while (ultenemy[rand_var] == 0):
 									rand_var = randi()%11
-								new_enemy_bullet.set_pos(enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos())
+								enemypos = enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos()
+							new_enemy_bullet.set_pos(Vector2(enemypos.x, enemypos.y+30))
 							add_child(new_enemy_bullet)
 						enemyshottime[0] = 0 #reseta o delta de tempo de tiro
 						enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
@@ -155,7 +158,7 @@ func anounce_death(object):
 	for i in range(5):
 		for j in range(11):
 			if enemies[i][j] == object:
-				var a=i+1
+				var a = i+1
 				enemies[i][j] = null
 				#verifica qual o ultimo alien da coluna
 				for k in range(i+1, 5):
@@ -186,7 +189,8 @@ func anounce_death(object):
 					score += 100
 				else:
 					score += 150
-				score_label.set_text(var2str(score))
+				score_label.set_text("SCORE: " + var2str(score))
+				return
 
 func hit_edge(side):
 	if (side == "right"):
@@ -207,7 +211,8 @@ func rand_shot(j):
 			rand_var = randi()%11
 		if has_node("enemyBullet") == false: #checar se o tiro ja foi destruido
 			new_enemy_bullet = Enemy_bullet.instance()
-			new_enemy_bullet.set_pos(enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos())
+			var enemypos = enemies[ultenemy[(j+rand_var)%11]-1][(j+rand_var)%11].get_pos()
+			new_enemy_bullet.set_pos(Vector2(enemypos.x, enemypos.y+30))
 			add_child(new_enemy_bullet)
 		enemyshottime[0] = 0 #reseta o delta de tempo de tiro
 		enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
@@ -217,4 +222,4 @@ func reborn():
 	new_ship.set_pos(Vector2(50, 700))
 	add_child(new_ship)
 	lives -= 1
-	lives_label.set_text(var2str(lives))
+	lives_label.set_text("LIVES: " + var2str(lives))
