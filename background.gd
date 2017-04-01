@@ -9,6 +9,7 @@ const Botton_alien = preload("res://botton_alien.xscn")
 const Bonus_alien = preload("res://bonus_alien.xscn")
 const Ship = preload("res://ship.xscn")
 const Barrier = preload("res://barrier.xscn")
+const Anim = preload("res://animations.xscn")
 
 onready var score_label = get_node("Score")
 onready var lives_label = get_node("Lives")
@@ -37,7 +38,7 @@ var lives = 2
 func _ready():
 	#cria a nave
 	new_ship = Ship.instance()
-	new_ship.set_pos(Vector2(50, 700))
+	new_ship.set_pos(Vector2(50, 690))
 	add_child(new_ship)
 	#cria os aliens
 	#se mudar as poscoes dos aliens mudar no tempo do tiro tbm
@@ -166,6 +167,13 @@ func anounce_death(object):
 			if enemies[i][j] == object:
 				var a = i+1
 				enemies[i][j] = null
+				
+				#Roda a animação de morte
+				var anim = Anim.instance()
+				anim.set_pos(object.get_pos())
+				add_child(anim)
+				anim.get_node("anim").play("alien_destroy")
+				
 				#verifica qual o ultimo alien da coluna
 				for k in range(i+1, 5):
 					if enemies[k][j] != null:
@@ -223,9 +231,17 @@ func rand_shot(j):
 		enemyshottime[0] = 0 #reseta o delta de tempo de tiro
 		enemyshottime[1] = rand_range(1, 1.75) #seleciona outro delta para tiro
 
-func reborn():
+func reborn(pos):
 	new_ship = Ship.instance()
-	new_ship.set_pos(Vector2(50, 700))
 	add_child(new_ship)
-	lives -= 1
+	if pos == Vector2(-100, -100):
+		new_ship.set_pos(Vector2(50,690))
+		new_ship.get_node("ship_anim").play("ship_appear")
+		#O tiro ainda pode ser disparado mesmo com a nave não aparecendo
+		lives -= 1
+		
+	else:
+		new_ship.set_pos(pos)
+		new_ship.get_node("ship_anim").play("ship_destroy")
+		reborn(Vector2(-100, -100))
 	lives_label.set_text("LIVES: " + var2str(lives))
